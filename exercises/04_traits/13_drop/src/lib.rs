@@ -21,3 +21,25 @@ mod tests {
         // since it has been defused
     }
 }
+
+pub struct DropBomb {
+    defused: bool,
+}
+
+impl DropBomb {
+    pub fn new() -> Self {
+        DropBomb { defused: false }
+    }
+
+    pub fn defuse(&mut self) {
+        self.defused = true;
+    }
+}
+
+impl Drop for DropBomb {
+    fn drop(&mut self) {
+        if !self.defused {
+            panic!("DropBomb was dropped without being defused!");
+        }
+    }
+}

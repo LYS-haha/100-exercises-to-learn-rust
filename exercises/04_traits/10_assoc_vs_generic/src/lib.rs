@@ -35,3 +35,29 @@ mod tests {
         assert_eq!(x, 8);
     }
 }
+
+pub trait Power<RHS = Self> {
+    type Output;
+    fn power(&self, rhs: RHS) -> Self::Output;
+}
+
+impl Power<&u32> for u32 {
+    type Output = u32;
+    fn power(&self, rhs: &u32) -> Self::Output {
+        self.pow(*rhs)
+    }
+}
+
+impl Power<u32> for u32 {
+    type Output = u32;
+    fn power(&self, rhs: u32) -> Self::Output {
+        self.pow(rhs)
+    }
+}
+
+impl Power<u16> for u32 {
+    type Output = u32;
+    fn power(&self, rhs: u16) -> Self::Output {
+        self.pow(rhs.into())
+    }
+}
