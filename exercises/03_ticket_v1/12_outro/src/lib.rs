@@ -11,3 +11,69 @@
 // Integration here has a very specific meaning: they test **the public API** of your project.
 // You'll need to pay attention to the visibility of your types and methods; integration
 // tests can't access private or `pub(crate)` items.
+
+pub struct Order {
+    product_name: String,
+    quantity: u32,
+    unit_price: u32, // in cents
+}
+
+impl Order {
+    pub fn new(product_name: String, quantity: u32, unit_price: u32) -> Self {
+        Order {
+            product_name: Self::validate_product_name(product_name),
+            quantity: Self::validate_quantity(quantity),
+            unit_price: Self::validate_unit_price(unit_price),
+        }
+    }
+
+    fn validate_product_name(product_name: String) -> String {
+        if product_name.is_empty() {
+            panic!("Product name cannot be empty");
+        }
+        if product_name.len() > 300 {
+            panic!("Product name cannot be longer than 300 bytes");
+        }
+        product_name
+    }
+
+    fn validate_quantity(quantity: u32) -> u32 {
+        if quantity == 0 {
+            panic!("Quantity must be strictly greater than zero");
+        }
+        quantity
+    }
+
+    fn validate_unit_price(unit_price: u32) -> u32 {
+        if unit_price == 0 {
+            panic!("Unit price must be strictly greater than zero");
+        }
+        unit_price
+    }
+
+    pub fn total(&self) -> u32 {
+        &self.quantity * &self.unit_price
+    }
+
+    pub fn product_name(&self) -> &String {
+        &self.product_name
+    }
+    pub fn quantity(&self) -> &u32 {
+        &self.quantity
+    }
+    pub fn unit_price(&self) -> &u32 {
+        &self.unit_price
+    }
+
+    pub fn set_product_name(&mut self, product_name: String) {
+        self.product_name = Self::validate_product_name(product_name);
+    }
+    
+    pub fn set_quantity(&mut self, quantity: u32) {
+        self.quantity = Self::validate_quantity(quantity);
+    }
+
+    pub fn set_unit_price(&mut self, unit_price: u32) {
+        self.unit_price = Self::validate_unit_price(unit_price);    
+    }
+}
