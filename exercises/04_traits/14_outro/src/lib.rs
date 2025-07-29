@@ -13,58 +13,56 @@ pub struct SaturatingU16 {
     value: u16,
 }
 
+
+//implementing conversions from u16
 impl From<u16> for SaturatingU16 {
     fn from(value: u16) -> Self {
-        SaturatingU16 { value }
-    }
-}
-impl From<u8> for SaturatingU16 {
-    fn from(value: u8) -> Self {
-        SaturatingU16 { value: value as u16 }
-    }
-}
-impl From<&u16> for SaturatingU16 {
-    fn from(value: &u16) -> Self {
-        SaturatingU16 { value: *value }
+        Self { value }
     }
 }
 
+//implementing conversions from u8
+impl From<u8> for SaturatingU16 {
+    fn from(value: u8) -> Self {
+        Self { value: value.into() }
+    }
+}
+
+//implementing conversions from &u16 by use u16.into
+impl From<&u16> for SaturatingU16 {
+    fn from(value: &u16) -> Self {
+        (*value).into()
+    }
+}
+
+//implementing conversions from &u8 by use u8.into
 impl From<&u8> for SaturatingU16 {
     fn from(value: &u8) -> Self {
-        SaturatingU16{  value: *value as u16 }
+        (*value).into()
     }
 }
 
 impl std::ops::Add for SaturatingU16 {
-    type Output = SaturatingU16;
+    type Output = Self;
     fn add(self, other: SaturatingU16) -> Self::Output {
-        SaturatingU16 {
-           value: self.value.saturating_add(other.value),
-        }
+        self + other.value  //SaturatingU16 + u16
     }
 }
 
 impl std::ops::Add<&SaturatingU16> for SaturatingU16 {
     type Output = SaturatingU16;
     fn add(self, other: &SaturatingU16) -> Self::Output {
-        SaturatingU16 {
-            value: self.value.saturating_add(other.value),
-        }
+        self + (*other).value  //SaturatingU16 + u16
     }
 }
 
+// Implementing addition with u16
 impl std::ops::Add<u16> for SaturatingU16 {
-    type Output = u16;
+    type Output = Self;
     fn add(self, other: u16) -> Self::Output {
-        self.value.saturating_add(other)
-    }
-}
-
-
-impl std::ops::Deref for SaturatingU16 {
-    type Target = u16;
-    fn deref(&self) -> &Self::Target {
-        &self.value
+        SaturatingU16 {
+            value: self.value.saturating_add(other)
+        }
     }
 }
 
