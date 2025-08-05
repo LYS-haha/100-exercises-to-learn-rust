@@ -51,20 +51,21 @@ impl TicketStore {
     // }
 
     pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
-        let id = self.count;
+        let id = TicketId(self.count);
         self.count += 1;
         let ticket = Ticket {
-            id: TicketId(id),
+            id: id,
             title: ticket.title,
             description: ticket.description,
             status: Status::ToDo,
         };
         self.tickets.push(ticket);
-        TicketId(id)
+        id
     }
 
     fn get(&self, id: TicketId) -> Option<&Ticket> {
-        self.tickets.iter().find(|ticket| ticket.id == id)
+        //iter 方法生成一个不可变引用的迭代器
+        self.tickets.iter().find(|&t| t.id == id)
     }
 }
 
